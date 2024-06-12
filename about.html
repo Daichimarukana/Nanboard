@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="/js/jquery-3.7.1.min.js"></script>
+    <script src="/js/crypto-js.js"></script>
+    <script src="/js/seedrandom.min.js"></script>
+    <script src="/js/main.js"></script>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="icon" href="/img/favicon.ico">
+    <title>Nanboard | Nanboardについて</title>
+</head>
+<body>
+    <header>
+        <a href="index.html">
+            <div class="logobox">
+                <img src="/img/Logo.png">
+                <h1><span>Nan</span>board</h1>
+            </div>
+        </a>
+    </header>
+
+    <main>
+        <h1>Nanboardへようこそ！</h1>
+        <p>Nanboardへようこそ！<br>
+            このページでは、Nanboardの概要や使い方、セキュリティについて解説しています！<br>
+            軽くお読みいただけるとありがたいです！</p>
+        <h2>Nanboardって？</h2>
+        <p>Nanboardは、簡単で軽く、アカウント登録不要で使えるデジタルホワイトボードです！<br>
+            まだ、ペン機能は実装できていませんが、付箋・テキストを他の人と共有しながらボードを扱ったり、データを保存、表示することができます。</p>
+        <p>ボードの共有以外にも、案をまとめたり、個人的な場所としても使用できます！</p>
+        <h2>Nanboardの使い方</h2>
+        <p>使い方は簡単！トップページより、ルームの作成をして、そのルームに参加するだけです。<br>
+            参加後は、上のメニューより、付箋・テキストの追加、データの保存、データの読み込み、ルームの共有ボタンがあり、それらを押して使用することができます。<br>
+            付箋を編集する際は、付箋にカーソルを合わせて文字を入力してください！<br>
+            テキストを追加した際も同じ操作で内容の編集が可能です。<br>
+            <br>
+            付箋やテキストの色を変える際は、付箋やテキストにカーソルを合わせて、右クリックをして色がついているところを押してください。<br>
+            色選択ダイアログがでてきて色の変更が可能です。<br>
+            <br>
+            テキストのサイズを変更する際は、テキストにカーソルを合わせて右クリックをし、数値が入っているところを変更してください！<br>
+            サイズの単位はpxです。<br>
+            <br>
+            変更を他のユーザーに適用するには、編集後、付箋もテキストもなにもないところにカーソルを合わせてクリックをしてください。
+        </p>
+        <h2>Nanboardのセキュリティ</h2>
+        <p>大前提として、NanboardはSSL/TLSにより暗号化がされた上でサーバー・ユーザーと通信を行っています。<br>
+            そのため、データを第三者がデータを覗くことは難しくなっています。<br>
+            また、Nanboardでは、独自のセキュリティ対策として、送信したデータがサーバーから(サービスの管理者から)も覗くことが難しい仕組みを実装しています。<br>
+            具体的には、以下の手順で暗号化を実施しています。<br>
+            <br>
+            - ユーザーで6文字のルームIDを作成する<br>
+            - ユーザーがそれをハッシュ化(元に戻せない一意の文字列)する<br>
+            - ユーザーがサーバーにハッシュ化したIDを送信する<br>
+            - サーバーでハッシュ化したIDでルームを作成する<br>
+            - ユーザーはハッシュ化前のルームIDを元に鍵を作成し、データを暗号化する<br>
+            - サーバーを介してハッシュ化前の文字列を使用して暗号化したデータを他の同じルームにいるユーザーに配信する<br>
+            - 他のユーザーがデータを受信し、同じルームIDをもとに鍵を作成し、暗号化を解除する。<br>
+            <br>
+            このような仕組みでサーバーが暗号化の解除をしようとしても難しい仕組みを実装しています。<br>
+            ハッシュ化という元の文字列に戻すことができない変換を行うことでサーバー側が暗号化の鍵を推測できずに、データの解読ができない仕組みです。(データを覗くつもりはありませんがね)
+        </p>
+        <h2>Errorcode一覧</h2>
+        <p>ここではNanboardで出るエラーコードを一覧にしています。<br>
+            - Browser_not_support: サポートされていないブラウザで使用した際に表示されます。<br>
+            - None_ssl: SSL/TLSが使用されていない状態で接続すると表示されます。<br>
+            - Bad_server_ssl: サーバーでSSL/TLSが設定されていない場合に表示されます。<br>
+            - Huh_savedata: セーブデータの中身がいろいろとおかしい場合に表示されます。<br>
+            - Bad_savedata: セーブデータの中身が、本来想定される形式に沿っていない場合に表示されます。<br>
+            - Connection_lost: サーバーとの接続を失った際に表示されます。<br>
+            - Connection_error: サーバーに接続できなかった際に表示されます。<br>
+            - Room_already_exists: 既に同じIDでルームが作成されている場合に表示されます。<br>
+            - Room_ID_is_invalid: ルームIDが不正な場合に表示されます。<br>
+            - Room_not_found: ルームが作成されていない、みつからない際に表示されます。</p>
+        <h2>注意事項</h2>
+        <p>ルームから全員が退出するとデータは削除されます。<br>
+            ルームに最低一人が入っていないとデータは削除されます。</p>
+        
+        <h2>ライセンス</h2>
+        <p><b>Crypto-js</b><br>
+            [The MIT License (MIT)](http://opensource.org/licenses/MIT)<br>
+            <br>
+            Copyright (c) 2009-2013 Jeff Mott<br>
+            Copyright (c) 2013-2016 Evan Vosberg<br>
+            <br>
+            Permission is hereby granted, free of charge, to any person obtaining a copy<br>
+            of this software and associated documentation files (the "Software"), to deal<br>
+            in the Software without restriction, including without limitation the rights<br>
+            to use, copy, modify, merge, publish, distribute, sublicense, and/or sell<br>
+            copies of the Software, and to permit persons to whom the Software is<br>
+            furnished to do so, subject to the following conditions:<br>
+            <br>
+            The above copyright notice and this permission notice shall be included in<br>
+            all copies or substantial portions of the Software.<br>
+            <br>
+            THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR<br>
+            IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,<br>
+            FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE<br>
+            AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER<br>
+            LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,<br>
+            OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN<br>
+            THE SOFTWARE.<br>
+        </p>
+        <p><b>elem2img.js</b><br>
+            無権利創作宣言</p>
+        <p><b>seedrandom.js</b><br>
+            Copyright 2019 David Bau.<br>
+            <br>
+            Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:<br>
+            <br>
+            The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.<br>
+            <br>
+            THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.<br>
+        </p>
+        <p><b>jQuery</b><br>
+            MIT License<br>
+            jquery.org/license<br>
+        </p>
+    </main>
+
+    <footer>
+        <a href="https://daichimarukana.com/"><span style="color:#F51F75">&copy;2022 - 2024 daichimarukana</span></a>
+        <a href="terms.html">利用規約</a>
+        <a href="privacy_policy.html">プライパシーポリシー</a>
+    </footer>
+</body>
+</html>

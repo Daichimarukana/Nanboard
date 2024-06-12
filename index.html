@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head prefix="og: https://ogp.me/ns#">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="/js/jquery-3.7.1.min.js"></script>
+    <script src="/js/crypto-js.js"></script>
+    <script src="/js/seedrandom.min.js"></script>
+    <script src="/js/elem2img.js"></script>
+    <script src="/js/main.js"></script>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="icon" href="/img/favicon.ico">
+    <meta property="og:url" content="https://nanboard.emptybox.win/" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Nanboard" />
+    <meta property="og:description" content="NaaaaaaaaaaaaaanでもいけるOnlineなboard！" />
+    <meta property="og:site_name" content="Nanboard | なーーーんでもいけるオンラインホワイトボード" />
+    <meta property="og:image" content="https://nanboard.emptybox.win/img/OGP.png" />
+    <title>Nanboard | なーーーんでもいけるオンラインホワイトボード</title>
+</head>
+<body>
+    <div>
+        <div id="notice" class="notice" style="display:none;">
+			<p id="notice_msg">特にメッセージはありません。</p>
+		</div>
+    </div>
+
+    <header>
+        <a href="index.html">
+            <div class="logobox">
+                <img src="/img/Logo.png">
+                <h1><span>Nan</span>board</h1>
+            </div>
+        </a>
+    </header>
+
+    <div class="toppage" id="room">
+        <div class="roombox">
+            <h1>Nanboardへようこそ！</h1>
+            <p>早速ルームを作成して自由なホワイトボードをつかいましょう！<br>
+            <br>
+            ルームに参加する場合はルームIDを右の入力ボックスに入力してJoin Roomを押してください。<br>
+            ルームを作成する場合は左のCreate Roomを押して、ルームを作成してからJoin Roomを押してください。<br>
+            <br>
+            ⚠️ルームには最低一人がいないとデータが保持されません！<br>
+            ルームから全員が退出する際はデータをダウンロードしてください。</p>
+            <div class="flexbox">
+                <div class="createbox">
+                    <button id="createRoom">Create Room</button>
+                    <div class="roomId">
+                        <h1 id="roomId">XXXXXX</h1>
+                    </div>
+                </div>
+                <hr>
+                <div class="loginbox">
+                    <input type="text" id="roomIdInput" placeholder="Enter Room ID">
+                    <button id="joinRoom">Join Room</button>
+                </div>
+            </div>
+            <div class="footer">
+                <a href="https://daichimarukana.com/" class="p2"><span style="color:#F51F75">&copy;2022 - 2024 daichimarukana</span></a>
+                <a href="about.html" class="p2">Nanboardについて!</a>
+                <a href="terms.html" class="p2">利用規約</a>
+                <a href="privacy_policy.html" class="p2">プライパシーポリシー</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="editpage" id="edit" style="display: none;">
+        <div class="item_menu">
+            <button id="addSticker" title="付箋を追加"><svg xmlns="http://www.w3.org/2000/svg" height="30px" viewBox="0 -960 960 960" width="30px" fill="#0a0a0a"><path d="M186.67-186.67h386.66v-200h200v-386.66H186.67v586.66Zm0 66.67q-27.5 0-47.09-19.58Q120-159.17 120-186.67v-586.66q0-27.5 19.58-47.09Q159.17-840 186.67-840h586.66q27.5 0 47.09 19.58Q840-800.83 840-773.33V-360L600-120H186.67Zm106.66-293.33V-480h180v66.67h-180Zm0-160V-640h373.34v66.67H293.33ZM186.67-186.67V-773.33v586.66Z"/></svg></button>
+            <button id="addText" title="テキストを追加"><svg xmlns="http://www.w3.org/2000/svg" height="30px" viewBox="0 -960 960 960" width="30px" fill="#0a0a0a"><path d="M446.67-320v-253.33h-120V-640h306.66v66.67h-120V-320h-66.66ZM40-40v-222h79.33v-436H40v-222h222v79.33h436V-920h222v222h-79.33v436H920v222H698v-79.33H262V-40H40Zm222-146h436v-76h76v-436h-76v-76H262v76h-76v436h76v76ZM106.67-764.67h88.66v-88.66h-88.66v88.66Zm658 0h88.66v-88.66h-88.66v88.66Zm0 658h88.66v-88.66h-88.66v88.66Zm-658 0h88.66v-88.66h-88.66v88.66Zm88.66-658Zm569.34 0Zm0 569.34Zm-569.34 0Z"/></svg></button>
+            <button id="getSave" title="デバイスに保存する"><svg xmlns="http://www.w3.org/2000/svg" height="30px" viewBox="0 -960 960 960" width="30px" fill="#0a0a0a"><path d="M840-682v495.33q0 27-19.83 46.84Q800.33-120 773.33-120H186.67q-27 0-46.84-19.83Q120-159.67 120-186.67v-586.66q0-27 19.83-46.84Q159.67-840 186.67-840H682l158 158Zm-66.67 29.33L652.67-773.33h-466v586.66h586.66v-466ZM479.84-243.33q45.49 0 77.49-31.85 32-31.84 32-77.33 0-45.49-31.84-77.49-31.84-32-77.33-32-45.49 0-77.49 31.84-32 31.85-32 77.34t31.84 77.49q31.84 32 77.33 32ZM235.33-576H594v-148.67H235.33V-576Zm-48.66-76.67v466-586.66 120.66Z"/></svg></button>
+            <button id="openFile" title="セーブデータを読み込む"><svg xmlns="http://www.w3.org/2000/svg" height="30px" viewBox="0 -960 960 960" width="30px" fill="#0a0a0a"><path d="M146.67-160q-26.34 0-46.5-20.17Q80-200.33 80-226.67v-506.66q0-26.34 20.17-46.5Q120.33-800 146.67-800H414l66.67 66.67h332.66q26.34 0 46.5 20.16Q880-693 880-666.67H452.33l-66.66-66.66h-239v506.66l100-373.33H940L834.33-209.67q-6.66 24.67-24.5 37.17Q792-160 766.67-160h-620Zm70-66.67H770l80-306.66H296.67l-80 306.66Zm0 0 80-306.66-80 306.66Zm-70-440v-66.66 66.66Z"/></svg></button>
+            <button id="copyLink" title="このルームの参加リンクをコピー"><svg xmlns="http://www.w3.org/2000/svg" height="30px" viewBox="0 -960 960 960" width="30px" fill="#0a0a0a"><path d="M446.67-280H280q-83 0-141.5-58.5T80-480q0-83 58.5-141.5T280-680h166.67v66.67H280q-55.56 0-94.44 38.84-38.89 38.84-38.89 94.33 0 55.49 38.89 94.49 38.88 39 94.44 39h166.67V-280ZM323.33-446.67v-66.66h313.34v66.66H323.33Zm190 166.67v-66.67H680q55.56 0 94.44-38.84 38.89-38.84 38.89-94.33 0-55.49-38.89-94.49-38.88-39-94.44-39H513.33V-680H680q83 0 141.5 58.5T880-480q0 83-58.5 141.5T680-280H513.33Z"/></svg></button>
+        </div>
+        <div id="itemsArea" class="itemsArea">
+            <canvas id="canvas"></canvas>
+        </div>
+
+        <div id="contextMenu" class="context-menu">
+            <button id="deleteSticker">Delete</button>
+            <input type="color" list="colors" class="ColorPicker" id="ColorPicker" value="#FFEB3B">
+            <datalist id="colors">
+                <option value="#FFEB3B"></option>
+                <option value="#70e000"></option>
+                <option value="#72ddf7"></option>
+                <option value="#FF80AB"></option>
+                <option value="#FFA500"></option>
+            </datalist>
+            <input type="number" value="" id="textsize" class="textsize" style="display: none;">
+        </div>
+    </div>
+
+    <div class="error" id="error" style="display: none;">
+        <div class="errormodal">
+            <h1>Error</h1>
+            <p id="error_message">申し訳ございません！<br>
+                エラーが発生しました！<br>
+                なお、エラーの詳細はわかりませんでした。</p>
+            <button id="error_okay">OK</button>
+        </div>
+    </div>
+
+    <div class="save" id="save" style="display: none;">
+        <div class="savemodal">
+            <h1>Save</h1>
+            <p>データをデバイスに保存する場合は下のダウンロードボタンを押してください。<br>
+                再びデータを読み込んで表示するには、Nanファイルで保存する必要があります。</p>
+            <select id="dl_datatype">
+                <option value="nan" selected>Nanファイル(.nan)</option>
+                <option value="png">PNG画像(.png)</option>
+                <option value="jpg">JPEG画像(.jpg)</option>
+                <option value="webp">Webp画像(.webp)</option>
+            </select>
+            <div class="dlbutton">
+                <a href="" download="" id="download_button">ダウンロード</a>
+            </div>
+            <button id="save_close">閉じる</button>
+        </div>
+    </div>
+</body>
+</html>
