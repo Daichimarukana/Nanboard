@@ -4,6 +4,7 @@ $(function() {
 	var Local_roomId = null;
 	var roomId = null;
 	var encryptionKey = null;
+	var Item_select = false;
 
 	// 鍵生成関数
 	function make_roomId(check, select){
@@ -203,6 +204,8 @@ $(function() {
 				break;
 			case 'error':
 				view_error(data.errorcode);
+				break;
+			case 'session_check':
 				break;
 		}
 	};
@@ -416,24 +419,41 @@ $(function() {
 
 	//Local------------------------------------------------------------------------
 	function select_sticker(sticker) {
-		sticker.on('mousedown' || 'touchstart', function(event) {
+		sticker.on('mousedown touchstart', function(event) {
+			Item_select = true;
+
 			resetCanvas();
 
 			z_Index++;
 			sticker.css('z-index', z_Index);
 
-			let offsetX = event.clientX - sticker.offset().left;
-			let offsetY = event.clientY - sticker.offset().top;
+			let offsetX = null;
+			let offsetY = null;
+			if(event.type == 'touchstart'){
+				offsetX = event.changedTouches[0].clientX - sticker.offset().left;
+				offsetY = event.changedTouches[0].clientY - sticker.offset().top;
+			}else{
+				offsetX = event.clientX - sticker.offset().left;
+				offsetY = event.clientY - sticker.offset().top;
+			}
 
-			$(document).on('mousemove.sticker' || 'touchmove.sticker', function(event) {
-				let newLeft = event.clientX - offsetX;
-				let newTop = event.clientY - offsetY;
+			$(document).on('mousemove.sticker touchmove.sticker', function(event) {
+				let newLeft = null;
+				let newTop = null;
+				if(event.type == 'touchmove'){
+					newLeft = event.changedTouches[0].clientX - offsetX;
+					newTop = event.changedTouches[0].clientY - offsetY;
+				}else{
+					newLeft = event.clientX - offsetX;
+					newTop = event.clientY - offsetY;
+				}
 
 				newLeft = Math.max(canvas.offsetLeft, Math.min(newLeft, canvas.offsetLeft + canvas.width - sticker.outerWidth()));
 				newTop = Math.max(canvas.offsetTop, Math.min(newTop, canvas.offsetTop + canvas.height - sticker.outerHeight()));
 
 				sticker.css({ left: newLeft + 'px', top: newTop + 'px' });
-			}).on('mouseup.sticker' || 'touchend.sticker', function() {
+			}).on('mouseup.sticker touchend.sticker', function() {
+				Item_select = false;
 				$(document).off('.sticker');
 				ws.send(JSON.stringify(encryptPayload({ 
 					type: 'sticker_message', 
@@ -465,24 +485,43 @@ $(function() {
 	}
 
 	function select_text(text) {
-		text.on('mousedown', function(event) {
+		text.on('mousedown touchstart', function(event) {
+			Item_select = true;
+
 			resetCanvas();
 
 			z_Index++;
 			text.css('z-index', z_Index);
 
-			let offsetX = event.clientX - text.offset().left;
-			let offsetY = event.clientY - text.offset().top;
+			let offsetX = null;
+			let offsetY = null;
+			if(event.type == 'touchstart'){
+				offsetX = event.changedTouches[0].clientX - text.offset().left;
+				offsetY = event.changedTouches[0].clientY - text.offset().top;
+			}else{
+				offsetX = event.clientX - text.offset().left;
+				offsetY = event.clientY - text.offset().top;
+			}
 
-			$(document).on('mousemove.text', function(event) {
-				let newLeft = event.clientX - offsetX;
-				let newTop = event.clientY - offsetY;
+			$(document).on('mousemove.text touchmove.text', function(event) {
+				let newLeft = null;
+				let newTop = null;
+				if(event.type == 'touchmove'){
+					newLeft = event.changedTouches[0].clientX - offsetX;
+					newTop = event.changedTouches[0].clientY - offsetY;
+				}else{
+					newLeft = event.clientX - offsetX;
+					newTop = event.clientY - offsetY;
+				}
 
 				newLeft = Math.max(canvas.offsetLeft, Math.min(newLeft, canvas.offsetLeft + canvas.width - text.outerWidth()));
 				newTop = Math.max(canvas.offsetTop, Math.min(newTop, canvas.offsetTop + canvas.height - text.outerHeight()));
 
 				text.css({ left: newLeft + 'px', top: newTop + 'px' });
-			}).on('mouseup.text', function() {
+				
+			}).on('mouseup.text touchend.text', function() {
+				Item_select = false;
+
 				$(document).off('.text');
 				ws.send(JSON.stringify(encryptPayload({ 
 					type: 'text_message', 
@@ -517,32 +556,36 @@ $(function() {
 
 	//Sticker------------------------------------------------
 	$('#addSticker').click(function() {
-		var rnd_id = Math.random().toString(36).substring(2, 8);
-		displaySticker('#FFEB3B', 'New Sticky Note', rnd_id, 50, 130);
-		ws.send(JSON.stringify(encryptPayload({ 
-			type: 'sticker_message', 
-			roomId: roomId, 
-			color: '#FFEB3B', 
-			message: 'New Sticky Note',
-			sticker_id: rnd_id,
-			x: 50,
-			y: 130
-		}, encryptionKey)));
+		if(Item_select === false){
+			var rnd_id = Math.random().toString(36).substring(2, 8);
+			displaySticker('#FFEB3B', 'New Sticky Note', rnd_id, 50, 130);
+			ws.send(JSON.stringify(encryptPayload({ 
+				type: 'sticker_message', 
+				roomId: roomId, 
+				color: '#FFEB3B', 
+				message: 'New Sticky Note',
+				sticker_id: rnd_id,
+				x: 50,
+				y: 130
+			}, encryptionKey)));
+		}
 	});
 	//text-----------------------------------------------------
 	$('#addText').click(function() {
-		var rnd_id = Math.random().toString(36).substring(2, 8);
-		displayText('#000000', 'New Text', rnd_id, 50, 130, 24);
-		ws.send(JSON.stringify(encryptPayload({ 
-			type: 'text_message', 
-			roomId: roomId, 
-			color: '#000000', 
-			message: 'New Text',
-			text_id: rnd_id,
-			x: 50,
-			y: 130,
-			size: 24
-		}, encryptionKey)));
+		if(Item_select === false){
+			var rnd_id = Math.random().toString(36).substring(2, 8);
+			displayText('#000000', 'New Text', rnd_id, 50, 130, 24);
+			ws.send(JSON.stringify(encryptPayload({ 
+				type: 'text_message', 
+				roomId: roomId, 
+				color: '#000000', 
+				message: 'New Text',
+				text_id: rnd_id,
+				x: 50,
+				y: 130,
+				size: 24
+			}, encryptionKey)));
+		}
 	});
 	//CopyLink---------------------------------------------------
 	$('#copyLink').click(function() {
